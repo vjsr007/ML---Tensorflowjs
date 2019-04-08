@@ -3,5 +3,40 @@
     <script src="/javascripts/views/ex03.js"></script>
 {% endblock %}
 {% block content %}
-<div id="output"></div>
+<table>
+    <thead>
+        <tr><td>True Table</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+                <th>Input1</th>
+                <th>Input2</th>
+                <th>Output</th>
+            </tr>
+            <tr>
+                <td><input type="text" class="value" value="0" readonly="readonly" /></td>
+                <td><input type="text" class="value" value="0" readonly="readonly" /></td>
+                <td><input type="text" class="value" value="0" /></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="value" value="0" readonly="readonly" /></td>
+                <td><input type="text" class="value" value="1" readonly="readonly" /></td>
+                <td><input type="text" class="value" value="0" /></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="value" value="1" readonly="readonly" /></td>
+                <td><input type="text" class="value" value="0" readonly="readonly" /></td>
+                <td><input type="text" class="value" value="0" /></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="value" value="1" readonly="readonly" /></td>
+                <td><input type="text" class="value" value="1" readonly="readonly" /></td>
+                <td><input type="text" class="value" value="0" /></td>
+            </tr>  
+    </tbody>
+    <tfoot>
+        <tr><td><button disabled="disabled">Loading model...</button></td></tr>
+        <tr><td><div id="output"></div></td></tr>        
+    </tfoot>        
+</table>
 {% endblock %}
