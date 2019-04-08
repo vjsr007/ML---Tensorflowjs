@@ -1,0 +1,22 @@
+footer {
+    clear: both;
+    width: 100%;
+    background: #e2e2e2;
+    position: fixed;
+    bottom: -12px;
+    height: 30px;
+    left: 0;
+    font-size: 11px;
+}
+.head {
+    width: 100%;
+    /*position: fixed;*/
+    top: 0;
+    left: 0;
+    /*height: 107px !important;*/
+    z-index: 99;
+}
+a {
+    color: black;
+    font-weight: 500;
+}

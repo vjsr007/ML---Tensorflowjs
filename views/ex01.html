@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block javascript %}
+    <script src="/javascripts/views/ex01.js"></script>
+{% endblock %}
+{% block content %}
+<div>
+	<canvas id="canvas" height="600" width="800"></canvas>
+	</div>
+	<div>
+	<div class="equation-div">
+		<div>Truth equation:</div>
+		<span>y =</span>
+		<input id="cubic-coeff" value="6e-6"></input>
+		<span>* x^3 +</span>
+		<input id="quad-coeff" value="-2e-3"></input>
+		<span>* x^2 +</span>
+		<input id="linear-coeff" value="0.1"></input>
+		<span>* x +</span>
+		<input id="const-coeff" value="10"></input>
+	</div>
+	<div class="input-div">
+		<span>Learning rate:</span>
+		<input id="learning-rate" value="0.5"></input>
+	</div>
+	<div class="input-div">
+		<span>Epochs:</span>
+		<input id="epochs" value="40"></input>
+	</div>
+</div>
+{% endblock %}
