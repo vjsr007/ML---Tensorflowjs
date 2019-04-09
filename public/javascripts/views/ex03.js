@@ -1,92 +1,65 @@
 $(() =>{
 
-    const xShape = [6,12];
-    const xData =   [
-                        [0, 0, 0,   0, 1, 0,    1, 0, 0,    1, 1, 0], //NEG
-                        [0, 0, 0,   0, 1, 0,    1, 0, 0,    1, 1, 1], //AND
-                        [0, 0, 0,   0, 1, 1,    1, 0, 1,    1, 1, 1], //OR
-                        [0, 0, 0,   0, 1, 1,    1, 0, 1,    1, 1, 0], //XOR
-                        [0, 0, 1,   0, 1, 1,    1, 0, 1,    1, 1, 0], //NAND
-                        [0, 0, 1,   0, 1, 0,    1, 0, 0,    1, 1, 0], //NOR
-                        
-                    ];
-    const yShape = [6,3];
-    const yData =   [
-                        [0,0,0], //NEG                        
-                        [0,0,1], //AND
-                        [0,1,0], //OR
-                        [0,1,1], //XOR
-                        [1,0,0],  //NAND
-                        [1,0,1],  //NOR
-                    ];
-    const epochs = 500;
+    
+    const operations = [
+        { idx: 0 , name: 'Contradiction'},
+        { idx: 1 , name: 'Logical NOR'},
+        { idx: 2 , name: 'Converse nonimplication'},
+        { idx: 3 , name: 'Fpq	Negation'},
+        { idx: 4 , name: 'Material nonimplication'},
+        { idx: 5 , name: 'Gpq	Negation'},
+        { idx: 6 , name: 'Exclusive disjunction XOR'},
+        { idx: 7 , name: 'Logical NAND'},
+        { idx: 8 , name: 'Logical conjunction AND'},
+        { idx: 9 , name: 'Logical biconditional XNOR'},
+        { idx: 10 , name: 'Projection function'},
+        { idx: 11 , name: 'Material implication'},
+        { idx: 12 , name: 'Projection function'},
+        { idx: 13 , name: 'Converse implication'},
+        { idx: 14 , name: 'Logical disjunction OR'},
+        { idx: 15 , name: 'Tautology T'}
+    ];
+
+    let xData = [];
+    let yData = [];
+    const epochs = 100;
 
     let xTensor;
     let yTensor;
     let model;
 
     const main = async () => {
+        fillDataset();
+
+        console.log(tf.memory().numTensors);        
+
         createModel();
-        
+
+        console.log(tf.memory().numTensors);
+
         const trainingResult = await trainModel();
 
         console.log(tf.memory().numTensors);
 
         $('button').html('Predict').attr('disabled',false).click(async () => {
             const predict = await predictModel();    
-            const result = []
-            
-            predict.forEach((p) => result.push(Math.round(p)));
-            
             console.log(tf.memory().numTensors);
-
-            console.log(result);
             console.log(predict);
             console.log(`loss: ${trainingResult.history.loss[epochs -1]}`);
-            switch(JSON.stringify(result)) {
-                case JSON.stringify([0,0,0]): //NEG
-                    document.getElementById("output").innerText = 'NEG';
-                    break;
-                case JSON.stringify([0,0,1]): //AND
-                    document.getElementById("output").innerText = 'AND';
-                    break;
-                case JSON.stringify([0,1,0]): //OR
-                    document.getElementById("output").innerText = 'OR';
-                    break;
-                case JSON.stringify([0,1,1]): //XOR
-                    document.getElementById("output").innerText = 'XOR';
-                    break;
-                case JSON.stringify([1,0,0]): //NAND
-                    document.getElementById("output").innerText = 'NAND';
-                    break;
-                case JSON.stringify([1,0,1]): //NOR
-                    document.getElementById("output").innerText = 'NOR';
-                    break;
-                default:
-                    document.getElementById("output").innerText = 'FAIL';
-            }
-
-        });        
+            $("#output").html(`Name: ${predict.name}`)
+        });
     }
 
     const createModel = () => {
         model = tf.sequential();
     
-        model.add(tf.layers.dense({ units: 5, inputShape: 12, activation: 'tanh'  }));
-        model.add(tf.layers.dense({ units: 3, activation: 'sigmoid' }));
+        model.add(tf.layers.dense({ units: 16, inputShape: [4], activation: 'tanh'  }));
+        model.add(tf.layers.dense({ units: 16, activation: 'sigmoid' }));
         
         const learningRate = 0.5;
         const optimizer = tf.train.sgd(learningRate);
         
         model.compile({ optimizer: optimizer, loss: 'binaryCrossentropy', lr: learningRate });
-        // Creating dataset
-        xTensor = tf.tensor2d(xData, xShape);
-        xTensor.print();
-        
-        yTensor = tf.tensor2d(yData, yShape);
-        yTensor.print();
-
-        console.log(tf.memory().numTensors);
     }
     
     const trainModel = async () => {
@@ -98,14 +71,44 @@ $(() =>{
     }
 
     const predictModel = async () => {
+        let output = [];
         let input = [];
-        $('input').each((i,o)=> input.push($(o).val()));
-        const xInput = tf.tensor2d([input], [1,12]);
+        $('input.output').each((i,o)=> output.push($(o).val()));
+        input.push(output.reverse());
+
+        const xInput = tf.tensor2d(input);
+        xInput.print();
         
-        // Test the model and display output 
-        const predict = await model.predict(xInput).data();
-        
-        return predict;
+        let operation;
+        tf.tidy(() => {
+            let results = model.predict(xInput);
+            console.log(results.dataSync());
+            let argMax = results.argMax(1);
+            let data  = argMax.dataSync()
+            console.log(data);
+            let index = data[0];
+            operation = operations[index];
+        });
+        return operation;
+    }
+
+    const fillDataset = () => {
+        xData = [];
+        yData = []
+        operations.forEach((o,i) => {
+            xData.push(('0000' + o.idx.toString(2)).slice(-4).split(''));
+            yData.push(o.idx);
+        });
+
+        // Creating dataset
+        xTensor = tf.tensor2d(xData);
+        xTensor.print();
+
+        let valuesTensor = tf.tensor1d(yData, 'int32');
+
+        yTensor = tf.oneHot(valuesTensor, 16).cast('float32');
+        valuesTensor.dispose();        
+        yTensor.print();    
     }
 
     main();
