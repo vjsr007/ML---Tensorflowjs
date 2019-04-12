@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block javascript %}    
+	<script src="/javascripts/libs/p5.min.js"></script>
+    <script src="/javascripts/libs/p5.dom.min.js"></script>
+    <script src="/javascripts/libs/ml5.min.js"></script>
+	<script src="/javascripts/views/ml03.js"></script>  
+{% endblock %}
+{% block content %}
+<style>
+button {
+    margin: 2px;
+    padding: 4px;
+}
+video{
+    width: 300;
+    height: 300;
+}
+p{
+    display: inline;
+    font-size: 14px;
+}
+h6{
+    margin: 4px;
+    font-weight: lighter;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+</style>
+
+<div id="videoContainer"></div>
+<h6><span id="modelStatus">Loading base model...</span> | <span id="videoStatus">Loading video...</span></h6>
+<p>
+    <button id="catButton">Add Cat Image</button>
+    <p><span id="amountOfCatImages">0</span> Cat Images</p>
+    <br><button id="dogButton">Add Dog Image</button>
+    <p><span id="amountOfDogImages">0</span> Dog Images</p>
+</p>
+<br/>
+<button id="train">Train</button><span id="loss"></span>
+<br/>
+<p>
+    <button id="buttonPredict">Start guessing!</button><br>
+    Your custom model labeled this as: <span id="result">...</span>,
+    with a confidence of <span id="confidence">...</span>.
+</p>
+<br/>
+<br>
+<button id="save">Save</button> 
+<br>
+<label for="avatar">Load Model:</label>
+<input type="file" id="load" multiple/>
+{% endblock %}
+
