@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% block javascript %}
+	<script src="/javascripts/libs/tensorflow.js"></script>
+    <script src="/javascripts/libs/p5.min.js"></script>
+    <script src="/javascripts/libs/p5.dom.min.js"></script>
+    <script src="/javascripts/views/ex03.js"></script>
+{% endblock %}
+{% block content %}
+<style>
+.output {
+    width: 50px;
+}
+.wikitable {
+    background-color: #f8f9fa;
+    color: #222;
+    margin: 1em 0;
+    border: 1px solid #a2a9b1;
+    border-collapse: collapse;
+}
+</style>
+<table class="wikitable" style="margin:1em auto 1em auto; text-align:left;">
+    <thead>
+        <tr><td colspan="3"><a href="https://en.wikipedia.org/wiki/Truth_table">Truth Table</a></td></tr>
+    </thead>
+    <tbody>
+        <tr>
+                <th>Input1</th>
+                <th>Input2</th>
+                <th>Output</th>
+            </tr>
+            <tr>
+                <td><input type="text" class="input" value="0" readonly="readonly" /></td>
+                <td><input type="text" class="input" value="0" readonly="readonly" /></td>
+                <td><input class="output" value="0" type="number" min="0" max="1" /></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="input" value="0" readonly="readonly" /></td>
+                <td><input type="text" class="input" value="1" readonly="readonly" /></td>
+                <td><input class="output" value="0" type="number" min="0" max="1" /></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="input" value="1" readonly="readonly" /></td>
+                <td><input type="text" class="input" value="0" readonly="readonly" /></td>
+                <td><input class="output" value="0" type="number" min="0" max="1"/></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="input" value="1" readonly="readonly" /></td>
+                <td><input type="text" class="input" value="1" readonly="readonly" /></td>
+                <td><input class="output" value="0" type="number" min="0" max="1"/></td>
+            </tr>  
+    </tbody>
+    <tfoot>
+        <tr><td colspan="3"><button disabled="disabled">Loading model...</button></td></tr>
+        <tr><td colspan="3"><div id="output"></div></td></tr>        
+    </tfoot>        
+</table>
+{% endblock %}
