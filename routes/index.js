@@ -73,6 +73,17 @@ router.get('/ex10', function(req, res){
   });
 });
 
+router.get('/ex11', function(req, res){
+  res.render('ex11', {
+    title: 'ex11'
+  });
+});
+
+router.get('/ex12', function(req, res){
+  res.render('ex12', {
+    title: 'ex12'
+  });
+});
 
 router.get('/ml01', function(req, res){
   res.render('ml01', {

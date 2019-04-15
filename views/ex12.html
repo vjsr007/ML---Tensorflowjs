@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block javascript %}
+	<script src="/javascripts/libs/tf.min.js"></script>
+	<script src="/javascripts/models/speech-commands.min.js"></script>
+    <script src="/javascripts/views/ex12.js"></script>
+{% endblock %}
+{% block content %}
+<div id="console"></div>
+<button id="left" onmousedown="collect(0)" onmouseup="collect(null)">Left</button>
+<button id="right" onmousedown="collect(1)" onmouseup="collect(null)">Right</button>
+<button id="noise" onmousedown="collect(2)" onmouseup="collect(null)">Noise</button>
+<br/><br/>
+<button id="train" onclick="train()">Train</button>
+<br/><br/>
+<button id="listen" onclick="listen()">Listen</button>
+<input type="range" id="output" min="0" max="10" step="0.1">
+{% endblock %}
