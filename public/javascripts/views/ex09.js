@@ -12,9 +12,9 @@ async function getData() {
     .filter(car => (car.mpg != null && car.horsepower != null));
     
     return cleaned;
-  }
+}
 
-  async function run() {
+async function run() {
     // Load and plot the original input data that we are going to train on.
     const data = await getData();
     const values = data.map(d => ({
@@ -34,7 +34,8 @@ async function getData() {
   
     // Create the model
     const model = createModel();  
-    //tfvis.show.modelSummary({name: 'Model Summary'}, model);
+    //const surface = { name: 'Model Summary', tab: 'Model Inspection'};
+    //tfvis.show.modelSummary(surface, model);
 
     // Convert the data to a form we can use for training.
     const tensorData = convertToTensor(data);
@@ -47,23 +48,24 @@ async function getData() {
     // Make some predictions using the model and compare them to the
     // original data
     testModel(model, data, tensorData);    
-  }
+}
 
-  function createModel() {
+function createModel() {
     // Create a sequential model
     const model = tf.sequential(); 
     
     // Add a single hidden layer
+    //model.add(tf.layers.dense({inputShape: [1], units: 1, useBias: true}));
     //model.add(tf.layers.dense({units: 50, activation: 'sigmoid'}));
-    model.add(tf.layers.dense({inputShape: [1], units: 1, useBias: true}));
-    
+    model.add(tf.layers.dense({inputShape: [1], units: 50, activation: 'sigmoid'}));
+
     // Add an output layer
     model.add(tf.layers.dense({units: 1, useBias: true}));
   
     return model;
-  }
+}
 
- /**
+/**
  * Convert the input data to a tensors that we can use for machine 
  * learning. We will also do the important best practices of _shuffling_
  * the data and _normalizing_ the data
@@ -103,12 +105,12 @@ function convertToTensor(data) {
         labelMin,
       }
     });  
-  }
+}
 
-  async function trainModel(model, inputs, labels) {
+async function trainModel(model, inputs, labels) {
     // Prepare the model for training.  
     model.compile({
-      optimizer: tf.train.adam(),
+      optimizer: tf.train.adam(0.1),
       loss: 'meanSquaredError',
       metrics: ['mse'],
     });
@@ -126,9 +128,9 @@ function convertToTensor(data) {
         { height: 200, callbacks: ['onEpochEnd'] }
       )
     });
-  }
+}
 
-  function testModel(model, inputData, normalizationData) {
+function testModel(model, inputData, normalizationData) {
     const {inputMax, inputMin, labelMin, labelMax} = normalizationData;  
     
     // Generate predictions for a uniform range of numbers between 0 and 1;
@@ -170,6 +172,6 @@ function convertToTensor(data) {
         height: 300
       }
     );
-  }
-  
-  document.addEventListener('DOMContentLoaded', run);
+}
+
+document.addEventListener('DOMContentLoaded', run);
