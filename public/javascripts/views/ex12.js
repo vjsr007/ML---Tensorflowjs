@@ -52,7 +52,7 @@ async function train() {
 
   await model.fit(xs, ys, {
     batchSize: 16,
-    epochs: 500,
+    epochs: 50,
     callbacks: {
       onEpochEnd: (epoch, logs) => {
         document.querySelector('#console').textContent =
